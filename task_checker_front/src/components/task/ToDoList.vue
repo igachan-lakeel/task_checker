@@ -2,6 +2,7 @@
 <script setup>
 import MenuIcon from "vue-material-design-icons/Menu.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
+import Task from "@/components/task/Task.vue";
 </script>
 
 <template>
@@ -11,7 +12,9 @@ import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
       <span class="section-ele">ToDo</span>
       <PlusCircleOutline class="add-circle-icon" />
     </div>
-    <div class="task-field"></div>
+    <div class="task-field">
+      <Task />
+    </div>
   </div>
 </template>
 
