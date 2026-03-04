@@ -1,9 +1,12 @@
 <script setup>
-import Home from "@/components/Home.vue";
+import Home from "@/views/Home.vue";
 </script>
 
 <template>
-  <Home />
+  <div>
+    <Home />
+    <p>見えますか？</p>
+  </div>
 </template>
 
 <style scoped></style>
