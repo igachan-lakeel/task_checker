@@ -1,6 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "@/assets/main.css"; // グローバルCSSを追加
+import { Modal } from "@kouts/vue-modal";
+import "@kouts/vue-modal/dist/vue-modal.css";
+import "@/assets/main.css";
 
-const app = createApp(App); // App.vue をアプリとして登録
-app.mount("#app"); // index.html の id="app" の要素に表示
+const app = createApp(App);
+app.component("Modal", Modal); // Modalをグローバルコンポーネントとして登録
+app.mount("#app");
