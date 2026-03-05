@@ -1,8 +1,12 @@
 <script setup>
+import { ref } from "vue";
 import Header from "@/components/common/Header.vue";
 import Select from "@/components/ui/Select.vue";
 import ToDoList from "@/components/task/ToDoList.vue";
+import FormModal from "@/components/modal/FormModal.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
+
+const showModal = ref(false);
 </script>
 
 <template>
@@ -10,7 +14,8 @@ import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
     <Header />
     <div class="genre">
       <Select />
-      <PlusCircleOutline class="add-icon" />
+      <PlusCircleOutline class="add-icon" @click="showModal = true" />
+      <FormModal v-model="showModal" body="genreBody" />
     </div>
     <div class="contents">
       <ToDoList />

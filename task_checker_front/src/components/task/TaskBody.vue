@@ -1,3 +1,4 @@
+<!-- モーダルの中身 -->
 <script setup>
 import Select from "@/components/ui/Select.vue";
 </script>

@@ -1,7 +1,11 @@
 <script setup>
+import { ref } from "vue";
 import MenuIcon from "vue-material-design-icons/Menu.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
 import Task from "@/components/task/Task.vue";
+import FormModal from "@/components/modal/FormModal.vue";
+
+const showModal = ref(false);
 </script>
 
 <template>
@@ -9,7 +13,8 @@ import Task from "@/components/task/Task.vue";
     <div class="section">
       <MenuIcon class="section-ele" />
       <span class="section-ele">ToDo</span>
-      <PlusCircleOutline class="add-circle-icon" />
+      <PlusCircleOutline class="add-circle-icon" @click="showModal = true" />
+      <FormModal v-model="showModal" body="taskBody" />
     </div>
     <div class="task-field">
       <Task />

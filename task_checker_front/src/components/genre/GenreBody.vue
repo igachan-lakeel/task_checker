@@ -1,3 +1,4 @@
+<!-- モーダルの中身 -->
 <script setup>
 import CancelIcon from "vue-material-design-icons/CloseCircle.vue";
 </script>
