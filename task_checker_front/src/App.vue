@@ -5,7 +5,6 @@ import Home from "@/views/Home.vue";
 <template>
   <div>
     <Home />
-    <p>見えますか？</p>
   </div>
 </template>
 
