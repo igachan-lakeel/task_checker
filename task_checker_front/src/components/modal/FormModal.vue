@@ -1,16 +1,29 @@
 <script setup>
-import { ref } from "vue";
+import { computed } from "vue";
+import GenreBody from "@/components/genre/GenreBody.vue";
+import TaskBody from "@/components/task/TaskBody.vue";
 
-const showModal = ref(false);
+const props = defineProps({
+  modelValue: { type: Boolean, required: true },
+  body: { type: String, required: true },
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+function close() {
+  emit("update:modelValue", false);
+}
+
+const component = computed(() => {
+  return props.body === "taskBody" ? TaskBody : GenreBody;
+});
 </script>
 
 <template>
-  <button @click="showModal = true">モーダルを開く</button>
-
   <Teleport to="body">
-    <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
+    <div v-if="props.modelValue" class="modal-overlay" @click.self="close">
       <div class="modal-content">
-        <p>ここにモーダルの中身が入ります</p>
+        <component :is="component" />
       </div>
     </div>
   </Teleport>
