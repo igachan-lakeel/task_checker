@@ -52,7 +52,7 @@ import Select from "@/components/ui/Select.vue";
   color: rgb(70, 70, 70);
   font-size: 12px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
