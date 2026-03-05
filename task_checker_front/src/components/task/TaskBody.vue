@@ -3,68 +3,52 @@ import Select from "@/components/ui/Select.vue";
 </script>
 
 <template>
-  <div class="task">
-    <span class="task-date">2021-01-01</span>
-    <div class="task-text-contents">
-      <h3 class="task-title">タスク名</h3>
-      <p class="task-sentence">タスクの説明</p>
-    </div>
-    <div class="task-input-contents">
+  <div class="modal-body">
+    <h2 class="input-menu">タスクを追加</h2>
+    <div>
+      <h4 class="input-title">ジャンル</h4>
       <Select />
+      <h4 class="input-title">タイトル</h4>
+      <input type="text" />
+      <h4 class="input-title">説明</h4>
+      <textarea />
+      <h4 class="input-title">期限</h4>
+      <input type="date" />
+      <h4 class="input-title">画像</h4>
+      <input type="file" accept="image/*" />
     </div>
+    <input class="input-submit" type="button" value="送信" />
   </div>
 </template>
 
 <style scoped>
-.task {
-  background-color: white;
-  max-height: 350px;
-  width: 300px;
-  margin-bottom: 20px;
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input,
+textarea {
+  border: none;
+  background-color: #f3f3f3;
+  padding: 16px;
   border-radius: 5px;
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-  position: relative;
-  cursor: pointer;
-  top: 0;
-  transition: top ease 0.2s;
+  width: 230px;
+  line-height: 1.5em;
 }
 
-.task:hover {
-  top: -2px;
-  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.1);
+.input-title {
+  height: 3px;
 }
 
-.task-text-contents {
-  padding: 30px 45px 0 20px;
-}
-
-.task-title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: rgb(70, 70, 70);
+.input-submit {
+  margin-top: 30px;
+  background-color: rgb(66, 163, 247);
+  color: white;
+  border-radius: 25px;
+  padding: 16px 40px;
   font-size: 15px;
-  margin-bottom: 10px;
-}
-
-.task-sentence {
-  overflow: hidden;
-  color: rgb(70, 70, 70);
-  font-size: 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
-
-.task-date {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  color: rgb(133, 133, 133);
-  font-size: 11px;
-}
-
-.task-input-contents {
-  padding: 0 20px 20px 20px;
 }
 </style>
