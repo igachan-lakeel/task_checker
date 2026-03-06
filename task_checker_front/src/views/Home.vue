@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useTaskStore } from "@/stores/TaskStore";
 // import api from '@/api/axios'   ← 削除（ストアに移動したため不要）
 import { useTaskStore } from "@/stores/TaskStore"; // 追加
 import { useGenreStore } from "@/stores/GenreStore"; // 追加
