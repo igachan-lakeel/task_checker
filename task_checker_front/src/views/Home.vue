@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import api from "@/api/axios";
 import Header from "@/components/common/Header.vue";
 import Select from "@/components/ui/Select.vue";
 import ToDoList from "@/components/task/ToDoList.vue";
@@ -7,6 +8,15 @@ import FormModal from "@/components/modal/FormModal.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
 
 const showModal = ref(false);
+
+onMounted(async () => {
+  try {
+    const AllTasks = await api.get("/tasks");
+    console.log(AllTasks);
+  } catch (error) {
+    console.error(error);
+  }
+});
 </script>
 
 <template>
