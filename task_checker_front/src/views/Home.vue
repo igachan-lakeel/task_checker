@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useTaskStore } from "@/stores/TaskStore";
-import api from "@/api/axios";
+// import api from '@/api/axios'   ← 削除（ストアに移動したため不要）
+import { useTaskStore } from "@/stores/TaskStore"; // 追加
+import { useGenreStore } from "@/stores/GenreStore"; // 追加
 import Header from "@/components/common/Header.vue";
 import Select from "@/components/ui/Select.vue";
 import ToDoList from "@/components/task/ToDoList.vue";
@@ -9,7 +11,8 @@ import FormModal from "@/components/modal/FormModal.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
 
 const showModal = ref(false);
-const taskStore = useTaskStore();
+const taskStore = useTaskStore(); // タスクストアのインスタンスを作成
+const genreStore = useGenreStore(); // ジャンルストアのインスタンスを作成
 
 onMounted(async () => {
   try {
@@ -19,8 +22,7 @@ onMounted(async () => {
   }
 
   try {
-    const AllGenres = await api.get("/genres");
-    console.log(AllGenres);
+    await genreStore.fetchAllGenres();
   } catch (error) {
     console.error(error);
   }
