@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 5173
 
 # サーバー起動のコマンド
-CMD ["npm", "run", "dev"]touch Dockerfile
+CMD ["npm", "run", "dev"]
