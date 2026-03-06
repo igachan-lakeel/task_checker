@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useTaskStore } from "@/stores/TaskStore";
 import api from "@/api/axios";
 import Header from "@/components/common/Header.vue";
 import Select from "@/components/ui/Select.vue";
@@ -8,11 +9,18 @@ import FormModal from "@/components/modal/FormModal.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
 
 const showModal = ref(false);
+const taskStore = useTaskStore();
 
 onMounted(async () => {
   try {
-    const AllTasks = await api.get("/tasks");
-    console.log(AllTasks);
+    await taskStore.fetchAllTasks();
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    const AllGenres = await api.get("/genres");
+    console.log(AllGenres);
   } catch (error) {
     console.error(error);
   }
