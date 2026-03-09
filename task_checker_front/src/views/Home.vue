@@ -31,6 +31,20 @@ const changeSelectedGenreId = (e) => {
   const selectGenreId = e.target.value;
   taskStore.filterTasks(selectGenreId);
 };
+
+const taskStatusElements = [
+  "ToDo",
+  "Pending",
+  "Doing(ToDay)",
+  "WIP",
+  "Check",
+  "Done",
+];
+
+const filterTasksByStatus = (statusIndex) => {
+  const index = statusIndex;
+  return taskStore.filteredTasks.filter((task) => task.status == index);
+};
 </script>
 
 <template>
@@ -42,7 +56,13 @@ const changeSelectedGenreId = (e) => {
       <FormModal v-model="showModal" body="genreBody" />
     </div>
     <div class="contents">
-      <ToDoList />
+      <div v-for="(status, index) in taskStatusElements" :key="index">
+        <ToDoList
+          :tasks="filterTasksByStatus(index)"
+          :key="index"
+          :status="status"
+        />
+      </div>
     </div>
   </div>
 </template>
