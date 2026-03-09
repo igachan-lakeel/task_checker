@@ -3,19 +3,31 @@ import { ref } from "vue"; // リアクティブなデータを作る関数
 import api from "@/api/axios"; // axios インスタンス
 
 export const useTaskStore = defineStore("task", () => {
-  // ① ストアで管理するデータ（全タスク。初期値は空の配列）
   const tasks = ref([]);
+  const filteredTasks = ref([]);
 
-  // ② サーバーから全タスクを取得してストアに保存する関数
   async function fetchAllTasks() {
     try {
       const response = await api.get("/tasks");
       tasks.value = response.data; // 取得したデータでストアを更新
+      filteredTasks.value = tasks.value;
     } catch (error) {
       console.log("タスクデータの取得に失敗しました", error);
     }
   }
 
-  // ③ 外部のコンポーネントから使えるよう公開する
-  return { tasks, fetchAllTasks };
+  async function filterTasks(genreId) {
+    const numericGenreId = Number(genreId);
+    //一般的にデータベースの ID は 1 から始まります。
+    // そのため、プルダウン（<select>）の一番上に置く「すべてのジャンル」や「未選択」という項目に対して、
+    // プログラム側で便宜上 value="0" を割り当てることが多いです。
+    if (numericGenreId === 0) {
+      filteredTasks.value = [...tasks.value];
+    } else {
+      filteredTasks.value = tasks.value.filter(
+        (task) => numericGenreId === task.genreId,
+      );
+    }
+  }
+  return { tasks, filteredTasks, fetchAllTasks, filterTasks };
 });

@@ -26,13 +26,18 @@ onMounted(async () => {
     console.error(error);
   }
 });
+
+const changeSelectedGenreId = (e) => {
+  const selectGenreId = e.target.value;
+  taskStore.filterTasks(selectGenreId);
+};
 </script>
 
 <template>
   <div class="main">
     <Header />
     <div class="genre">
-      <Select />
+      <Select @change="changeSelectedGenreId" />
       <PlusCircleOutline class="add-icon" @click="showModal = true" />
       <FormModal v-model="showModal" body="genreBody" />
     </div>

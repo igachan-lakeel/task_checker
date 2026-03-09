@@ -20,7 +20,7 @@ const showModal = ref(false);
     </div>
 
     <div class="task-field">
-      <div v-for="task in taskStore.tasks" :key="task.id">
+      <div v-for="task in taskStore.filteredTasks" :key="task.id">
         <Task :task="task" />
       </div>
     </div>
