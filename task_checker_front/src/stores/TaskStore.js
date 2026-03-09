@@ -1,26 +1,26 @@
-import { defineStore } from "pinia"; // ストアを定義する関数
-import { ref } from "vue"; // リアクティブなデータを作る関数
-import api from "@/api/axios"; // axios インスタンス
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import api from "@/api/axios";
 
 export const useTaskStore = defineStore("task", () => {
   const tasks = ref([]);
   const filteredTasks = ref([]);
 
-  async function fetchAllTasks() {
+  // 全タスク取得
+  const fetchAllTasks = async () => {
     try {
       const response = await api.get("/tasks");
-      tasks.value = response.data; // 取得したデータでストアを更新
-      filteredTasks.value = tasks.value;
+      tasks.value = response.data;
+      // 初期表示時は全件を表示
+      filteredTasks.value = response.data;
     } catch (error) {
-      console.log("タスクデータの取得に失敗しました", error);
+      console.error("タスクデータの取得に失敗しました", error);
     }
-  }
+  };
 
-  async function filterTasks(genreId) {
+  // ジャンルによるフィルタリング
+  const filterTasks = (genreId) => {
     const numericGenreId = Number(genreId);
-    //一般的にデータベースの ID は 1 から始まります。
-    // そのため、プルダウン（<select>）の一番上に置く「すべてのジャンル」や「未選択」という項目に対して、
-    // プログラム側で便宜上 value="0" を割り当てることが多いです。
     if (numericGenreId === 0) {
       filteredTasks.value = [...tasks.value];
     } else {
@@ -28,6 +28,39 @@ export const useTaskStore = defineStore("task", () => {
         (task) => numericGenreId === task.genreId,
       );
     }
-  }
-  return { tasks, filteredTasks, fetchAllTasks, filterTasks };
+  };
+
+  // タスクの追加（アロー関数）
+  const addTask = async (newTask) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", newTask.name);
+      formData.append("explanation", newTask.explanation);
+      formData.append("deadlineDate", newTask.deadlineDate);
+      formData.append("status", newTask.status);
+      formData.append("genreId", newTask.genreId);
+      formData.append("image_url", newTask.image_url);
+
+      // headersはAxiosがFormDataを検知して自動設定してくれるため、基本省略可能です
+      const response = await api.post("/tasks", formData);
+
+      const addedTask = response.data;
+
+      // 重要：保存成功後、ストアの配列に新しいデータを追加して画面に即時反映させる
+      tasks.value = [...tasks.value, addedTask];
+      // 現在のフィルタリング状態に関わらず、一旦リストを更新（必要に応じて再フィルタリング）
+      filteredTasks.value = [...tasks.value];
+    } catch (error) {
+      console.error("タスクデータの保存ができませんでした", error);
+    }
+  };
+
+  // すべての変数と関数を公開する
+  return {
+    tasks,
+    filteredTasks,
+    fetchAllTasks,
+    filterTasks,
+    addTask,
+  };
 });

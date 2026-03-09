@@ -2,6 +2,7 @@
 <script setup>
 import Select from "@/components/ui/Select.vue";
 import { ref } from "vue";
+import { useTaskStore } from "@/stores/TaskStore";
 
 const task = ref({
   name: "",
@@ -12,12 +13,18 @@ const task = ref({
   genreId: "",
 });
 
+const taskStore = useTaskStore();
+
 const genreSelect = (e) => {
   task.value.genreId = Number(e.target.value);
 };
 
 const handleImageUpload = (event) => {
   task.value.image_url = event.target.files[0];
+};
+
+const submitTask = async () => {
+  taskStore.addTask(task.value);
 };
 </script>
 
@@ -45,7 +52,12 @@ const handleImageUpload = (event) => {
       <input type="file" @change="handleImageUpload" accept="image/*" />
     </div>
 
-    <input class="input-submit" type="button" value="送信" />
+    <input
+      class="input-submit"
+      type="button"
+      value="送信"
+      @click="submitTask"
+    />
   </div>
 </template>
 
