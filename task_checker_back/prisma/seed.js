@@ -17,7 +17,7 @@ async function main() {
       data: [
         {
           name: "task1",
-          explanation: "test1",
+          explanation: "test1です。sees.jsです",
           deadlineDate: new Date("2024-01-01"),
           image_url: "",
           status: 0,
@@ -25,7 +25,7 @@ async function main() {
         },
         {
           name: "task2",
-          explanation: "test2",
+          explanation: "test2です。sees.jsです",
           deadlineDate: new Date("2024-01-02"),
           image_url: "",
           status: 0,

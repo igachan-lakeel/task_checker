@@ -4,20 +4,40 @@ import MenuIcon from "vue-material-design-icons/Menu.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
 import Task from "@/components/task/Task.vue";
 import FormModal from "@/components/modal/FormModal.vue";
+import { useTaskStore } from "@/stores/TaskStore";
+const taskStore = useTaskStore();
 
 const showModal = ref(false);
+const showTask = ref(true);
+
+const props = defineProps({
+  status: String,
+  tasks: Object,
+});
+
+const toggleShowTasks = () => {
+  showTask.value = !showTask.value;
+};
 </script>
 
 <template>
   <div class="task-list">
     <div class="section">
-      <MenuIcon class="section-ele" />
-      <span class="section-ele">ToDo</span>
-      <PlusCircleOutline class="add-circle-icon" @click="showModal = true" />
+      <MenuIcon class="section-ele" @click="toggleShowTasks" />
+      <span class="section-ele">{{ props.status }}</span>
+      <PlusCircleOutline
+        v-if="props.status == 'ToDo'"
+        class="add-circle-icon"
+        @click="showModal = true"
+      />
+
       <FormModal v-model="showModal" body="taskBody" />
     </div>
-    <div class="task-field">
-      <Task />
+
+    <div v-if="showTask">
+      <div class="task-field" v-for="task in props.tasks" :key="task.id">
+        <Task :task="task" />
+      </div>
     </div>
   </div>
 </template>
