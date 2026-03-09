@@ -24,13 +24,16 @@ const taskStyle = computed(() => {
 
 <template>
   <div class="task" :style="taskStyle">
-    <span class="task_date">{{ formattedDeadlineDate }}</span>
-
+    <span class="task-date">{{ formattedDeadlineDate }}</span>
     <div class="task-text-contents">
       <h3 class="task-title">{{ task.name }}</h3>
       <p class="task-sentence">{{ task.explanation }}</p>
+      <div v-if="task.image_url" class="image-container">
+        <div class="image-wrapper">
+          <img :src="task.image_url" class="task-image" />
+        </div>
+      </div>
     </div>
-
     <div class="task-input-contents">
       <Select />
     </div>
