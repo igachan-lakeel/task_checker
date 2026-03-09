@@ -23,8 +23,11 @@ const handleImageUpload = (event) => {
   task.value.image_url = event.target.files[0];
 };
 
+const emit = defineEmits(["close-modal"]);
+
 const submitTask = async () => {
   taskStore.addTask(task.value);
+  emit("close-modal");
 };
 </script>
 

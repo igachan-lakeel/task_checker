@@ -8,8 +8,6 @@ const props = defineProps({
   body: { type: String, required: true },
 });
 
-const emit = defineEmits(["update:modelValue"]);
-
 function close() {
   emit("update:modelValue", false);
 }
@@ -17,13 +15,19 @@ function close() {
 const component = computed(() => {
   return props.body === "taskBody" ? TaskBody : GenreBody;
 });
+
+const emit = defineEmits(["close-modal"]);
+
+const closeModal = () => {
+  emit("close-modal");
+};
 </script>
 
 <template>
   <Teleport to="body">
     <div v-if="props.modelValue" class="modal-overlay" @click.self="close">
       <div class="modal-content">
-        <component :is="component" />
+        <component :is="component" @close-modal="closeModal" />
       </div>
     </div>
   </Teleport>
