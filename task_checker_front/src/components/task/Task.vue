@@ -13,10 +13,17 @@ const formattedDeadlineDate = computed(() => {
   // 変換した Date オブジェクトを、日本の日付形式に変換する
   return date.toLocaleDateString("ja-JP");
 });
+
+const taskStyle = computed(() => {
+  const isDeadlineAfterToday = new Date(props.task.deadlineDate) > new Date();
+  return {
+    backgroundColor: isDeadlineAfterToday ? "white" : "rgb(250, 194, 194)",
+  };
+});
 </script>
 
 <template>
-  <div class="task">
+  <div class="task" :style="taskStyle">
     <span class="task_date">{{ formattedDeadlineDate }}</span>
 
     <div class="task-text-contents">
