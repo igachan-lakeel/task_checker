@@ -46,9 +46,10 @@ export const useTaskStore = defineStore("task", () => {
 
       const addedTask = response.data;
 
-      // 重要：保存成功後、ストアの配列に新しいデータを追加して画面に即時反映させる
+      // 1. 全体のデータに追加
       tasks.value = [...tasks.value, addedTask];
-      // 現在のフィルタリング状態に関わらず、一旦リストを更新（必要に応じて再フィルタリング）
+
+      // 2. 表示用のデータも更新（これで画面に即座に反映されます）
       filteredTasks.value = [...tasks.value];
     } catch (error) {
       console.error("タスクデータの保存ができませんでした", error);
