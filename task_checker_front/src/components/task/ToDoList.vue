@@ -8,17 +8,22 @@ import { useTaskStore } from "@/stores/TaskStore";
 const taskStore = useTaskStore();
 
 const showModal = ref(false);
+const showTask = ref(true);
 
 const props = defineProps({
   status: String,
   tasks: Object,
 });
+
+const toggleShowTasks = () => {
+  showTask.value = !showTask.value;
+};
 </script>
 
 <template>
   <div class="task-list">
     <div class="section">
-      <MenuIcon class="section-ele" />
+      <MenuIcon class="section-ele" @click="toggleShowTasks" />
       <span class="section-ele">{{ props.status }}</span>
       <PlusCircleOutline
         v-if="props.status == 'ToDo'"
