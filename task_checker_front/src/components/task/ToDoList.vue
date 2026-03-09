@@ -4,6 +4,8 @@ import MenuIcon from "vue-material-design-icons/Menu.vue";
 import PlusCircleOutline from "vue-material-design-icons/PlusCircleOutline.vue";
 import Task from "@/components/task/Task.vue";
 import FormModal from "@/components/modal/FormModal.vue";
+import { useTaskStore } from "@/stores/TaskStore";
+const taskStore = useTaskStore();
 
 const showModal = ref(false);
 </script>
@@ -16,8 +18,11 @@ const showModal = ref(false);
       <PlusCircleOutline class="add-circle-icon" @click="showModal = true" />
       <FormModal v-model="showModal" body="taskBody" />
     </div>
+
     <div class="task-field">
-      <Task />
+      <div v-for="task in taskStore.tasks" :key="task.id">
+        <Task :task="task" />
+      </div>
     </div>
   </div>
 </template>
