@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
 import Home from "@/views/Home.vue";
+import SearchResult from "@/components/SearchResult.vue";
 import { auth, onAuthStateChanged } from "@/firebase.js";
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: "/home",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/search",
+    name: "SearchResult",
+    component: SearchResult,
   },
 ];
 

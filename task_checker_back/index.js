@@ -95,3 +95,36 @@ app.post("/genres", async (req, res) => {
 app.listen(3000, () => {
   console.log("listening on localhost 3000");
 });
+
+app.get("/search", async (req, res) => {
+  const query = req.query.q || "";
+
+  try {
+    // タイトルにクエリを含む投稿を検索
+    const tasks = await prisma.task.findMany({
+      where: {
+        name: {
+          contains: query, // タイトルにクエリを含む
+          mode: "insensitive", // 大文字小文字を区別しない
+        },
+      },
+      orderBy: {
+        deadlineDate: "desc", // 最新の投稿を上に表示
+      },
+    });
+
+    const updatedTasks = tasks.map((task) => {
+      if (task.image_url) {
+        task.image_url = `http://localhost:3000/${task.image_url}`;
+      } else {
+        task.image_url = null;
+      }
+      return task;
+    });
+
+    res.json(updatedTasks); // 検索結果を返す
+  } catch (error) {
+    console.error("検索処理に失敗しました:", error);
+    res.status(500).json({ message: "検索処理に失敗しました" });
+  }
+});
