@@ -2,7 +2,21 @@
 import Header from "@/components/common/Header.vue";
 import { ref } from "vue";
 import { auth, createUserWithEmailAndPassword } from "@/firebase";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter(); // ナビゲーション用（router.push など）
+const route = useRoute(); // 現在のルート情報（route.params など）
+
+const email = ref("");
+const password = ref("");
+
+const handleSignUp = async () => {
+  try {
+    await createUserWithEmailAndPassword(auth, email.value, password.value);
+    router.push("/home");
+  } catch (error) {
+    console.log("ユーザー登録できませんでした", error);
+  }
+};
 </script>
 
 <template>
@@ -11,9 +25,14 @@ import { useRouter } from "vue-router";
 
     <div class="form-body">
       <h1>新規登録</h1>
-      <input type="text" id="email" placeholder="email" />
-      <input type="password" id="password" placeholder="password" />
-      <button value="新規登録">新規登録</button>
+      <input type="email" id="email" placeholder="email" v-model="email" />
+      <input
+        type="password"
+        id="password"
+        placeholder="password"
+        v-model="password"
+      />
+      <button value="新規登録" @click="handleSignUp">新規登録</button>
       <p>
         既にアカウントをお持ちの方は
         <RouterLink to="/">こちらへ</RouterLink>

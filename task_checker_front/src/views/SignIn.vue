@@ -2,7 +2,9 @@
 import Header from "@/components/common/Header.vue";
 import { auth, onAuthStateChanged } from "@/firebase.js";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+const router = useRouter(); // ナビゲーション用（router.push など）
+const route = useRoute(); // 現在のルート情報（route.params など）
 </script>
 
 <template>
