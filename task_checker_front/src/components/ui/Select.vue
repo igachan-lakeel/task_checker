@@ -5,13 +5,19 @@ const genreStore = useGenreStore();
 
 <template>
   <select class="select">
-    <div v-for="genre in genreStore.genres" :key="genre.id" :value="genre.id">
+    <option value="" disabled selected>選択してください</option>
+    <option
+      v-for="genre in genreStore.genres"
+      :key="genre.id"
+      :value="genre.id"
+    >
       {{ genre.name }}
-    </div>
+    </option>
   </select>
 </template>
 
 <style scoped>
+/* スタイルは変更なしでOKです */
 .select {
   width: 150px;
   height: 25px;
