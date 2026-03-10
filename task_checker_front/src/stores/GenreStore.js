@@ -3,10 +3,9 @@ import { ref } from "vue";
 import api from "@/api/axios";
 
 export const useGenreStore = defineStore("genre", () => {
-  // 全ジャンルデータ（初期値は空の配列）
   const genres = ref([]);
 
-  // サーバーから全ジャンルを取得してストアに保存する関数
+  // 全ジャンル取得
   async function fetchAllGenres() {
     try {
       const response = await api.get("/genres");
@@ -16,5 +15,18 @@ export const useGenreStore = defineStore("genre", () => {
     }
   }
 
-  return { genres, fetchAllGenres };
+  // ★追加：ジャンルの保存処理
+  async function addGenre(name) {
+    try {
+      // サーバーへ送信
+      const response = await api.post("/genres", { name });
+      // 成功したら、今のリストの末尾に新しいデータを追加（画面が即座に更新される）
+      genres.value = [...genres.value, response.data];
+    } catch (error) {
+      console.error("ジャンルの保存に失敗しました", error);
+    }
+  }
+
+  // addGenre を return に追加するのを忘れずに
+  return { genres, fetchAllGenres, addGenre };
 });

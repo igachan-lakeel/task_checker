@@ -18,6 +18,10 @@ const props = defineProps({
 const toggleShowTasks = () => {
   showTask.value = !showTask.value;
 };
+
+const closeModal = () => {
+  showModal.value = false;
+};
 </script>
 
 <template>
@@ -31,7 +35,11 @@ const toggleShowTasks = () => {
         @click="showModal = true"
       />
 
-      <FormModal v-model="showModal" body="taskBody" />
+      <FormModal
+        v-model="showModal"
+        body="taskBody"
+        @close-modal="closeModal"
+      />
     </div>
 
     <div v-if="showTask">
