@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
 import Home from "@/views/Home.vue";
-import { auth, signInWithEmailAndPassword } from "@/firebase.js";
-
+import { auth, onAuthStateChanged } from "@/firebase.js";
 const routes = [
   {
     path: "/",
@@ -25,6 +24,31 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+});
+
+function getCurrentUser(auth) {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      reject,
+    );
+  });
+}
+
+router.beforeEach(async (to, from, next) => {
+  const currentUser = await getCurrentUser(auth);
+
+  if (!currentUser && to.path !== "/" && to.path !== "/signup") {
+    next("/");
+  } else if (currentUser && (to.path === "/" || to.path === "/signup")) {
+    next("/home");
+  } else {
+    next();
+  }
 });
 
 export default router;
