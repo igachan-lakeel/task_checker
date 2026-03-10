@@ -7,6 +7,7 @@ import { ref, onMounted } from "vue";
 const router = useRouter(); // ナビゲーション用（router.push など）
 const route = useRoute(); // 現在のルート情報（route.params など）
 const currentUser = ref(null);
+const searchKeyword = ref("");
 
 const handleSignOut = async () => {
   try {
@@ -27,31 +28,45 @@ onMounted(() => {
     }
   });
 });
+
+const handleSubmit = (e) => {
+  e.preventDefault(); //ページのリロードをキャンセル
+
+  if (searchKeyword.value.trim()) {
+    router.push({
+      path: "/search",
+      query: { q: searchKeyword.value },
+    });
+  } else {
+    router.push("/");
+  }
+};
 </script>
 
 <template>
   <div class="header">
     <div class="header-left">
-      <CheckAll class="header-icon" />
-      <span class="header-title">Task Checker</span>
+      <CheckAll class="header-icon" fontsize="large" />
+      <RouterLink to="/home" class="header-title">Task Checker</RouterLink>
     </div>
 
-    <div v-if="currentUser" class="header-search">
-      <div class="search-container">
+    <div class="header-center">
+      <form @submit="handleSubmit" class="search-container">
         <input
+          v-model="searchKeyword"
           placeholder="タイトルで検索"
           class="search-input"
           type="search"
           aria-label="検索"
         />
-        <button class="search-button">検索</button>
-      </div>
+        <button type="submit" class="search-button">検索</button>
+      </form>
     </div>
 
-    <div v-if="currentUser" class="header-right">
-      <div class="header-right">
-        <button @click="handleSignOut" class="logout-button">ログアウト</button>
-      </div>
+    <div class="header-right">
+      <button v-if="currentUser" @click="handleSignOut" class="logout-button">
+        ログアウト
+      </button>
     </div>
   </div>
 </template>
@@ -117,5 +132,11 @@ onMounted(() => {
   padding: 8px 20px;
   margin-bottom: 8px;
   font-size: 15px;
+}
+
+.header-title {
+  color: rgb(70, 70, 70);
+  font-weight: bold;
+  text-decoration: none;
 }
 </style>
