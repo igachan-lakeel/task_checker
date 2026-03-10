@@ -1,10 +1,10 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
-import { auth, onAuthStateChanged } from "@/firebase.js";
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
-const router = useRouter(); // ナビゲーション用（router.push など）
-const route = useRoute(); // 現在のルート情報（route.params など）
+import { useRouter } from "vue-router";
+import { auth, signInWithEmailAndPassword } from "@/firebase";
+
+const router = useRouter();
 const email = ref("");
 const password = ref("");
 
@@ -13,7 +13,7 @@ const handleSignIn = async () => {
     await signInWithEmailAndPassword(auth, email.value, password.value);
     router.push("/home");
   } catch (error) {
-    console.log("ログインに失敗しました");
+    console.log("ログインに失敗しました", error);
   }
 };
 </script>

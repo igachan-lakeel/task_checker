@@ -4,7 +4,6 @@ import { ref } from "vue";
 import { auth, createUserWithEmailAndPassword } from "@/firebase";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter(); // ナビゲーション用（router.push など）
-const route = useRoute(); // 現在のルート情報（route.params など）
 
 const email = ref("");
 const password = ref("");
