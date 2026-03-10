@@ -30,7 +30,7 @@ export const useTaskStore = defineStore("task", () => {
     }
   };
 
-  // タスクの追加（アロー関数）
+  // タスクの追加
   const addTask = async (newTask) => {
     try {
       const formData = new FormData();
@@ -40,26 +40,22 @@ export const useTaskStore = defineStore("task", () => {
       formData.append("status", newTask.status);
       formData.append("genreId", newTask.genreId);
 
-      // 画像ファイルを append。キー名はサーバーの定義（例: image）に合わせる
+      // サーバー側の upload.single("image") とキー名を合わせる
       if (newTask.image_url) {
         formData.append("image", newTask.image_url);
       }
 
       const response = await api.post("/tasks", formData);
-
       const addedTask = response.data;
 
-      // 1. 全体のデータに追加
+      // データの更新（スプレッド構文を使用してリアクティブに更新）
       tasks.value = [...tasks.value, addedTask];
-
-      // 2. 表示用のデータも更新（これで画面に即座に反映されます）
       filteredTasks.value = [...tasks.value];
     } catch (error) {
       console.error("タスクデータの保存ができませんでした", error);
     }
   };
 
-  // すべての変数と関数を公開する
   return {
     tasks,
     filteredTasks,

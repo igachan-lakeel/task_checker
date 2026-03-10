@@ -2,85 +2,96 @@ const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const app = express();
-const cors = require("cors"); // cors をインポート
+const cors = require("cors");
+const multer = require("multer");
+
+// CORS設定
 app.use(
   cors({
-    // cors の設定を適用
-    origin: "http://localhost:5173", // このオリジンからのリクエストを許可
-    methods: ["GET", "POST", "PUT", "DELETE"], // 許可する HTTP メソッド
-    credentials: true, // Cookie・認証情報の送受信を許可
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   }),
 );
 
-// multerのインポート
-const multer = require("multer");
-// クライアントからアップロードされたファイルの保存ディレクトリをuploads/に設定
+// Multer設定（画像保存先）
 const upload = multer({ dest: "uploads/" });
-// クライアントがブラウザから画像にアクセスするためのURL
 app.use("/uploads", express.static("uploads"));
 
 app.use(express.json());
 
-app.listen(3000, () => {
-  console.log("listening on localhost 3000");
-});
+// --- ルーティング ---
 
-// 全タスクの取得処理
+// 1. 全タスク取得
 app.get("/tasks", async (req, res) => {
   try {
-    const AllTasks = await prisma.task.findMany();
-    const updatedTasks = AllTasks.map((task) => {
+    const allTasks = await prisma.task.findMany();
+    const updatedTasks = allTasks.map((task) => {
       if (task.image_url) {
         task.image_url = `http://localhost:3000/${task.image_url}`;
-      } else {
-        task.image_url = null;
       }
       return task;
     });
-
     res.json(updatedTasks);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).send("取得失敗");
   }
 });
 
-// 全ジャンルの取得処理
-app.get("/genres", async (req, res) => {
+// 2. タスク保存 (ここが重要)
+app.post("/tasks", upload.single("image"), async (req, res) => {
   try {
-    const AllGenres = await prisma.genre.findMany();
-    res.json(AllGenres);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-//
-app.post("/tasks", upload.single("image_url"), async (req, res) => {
-  console.log("リクエストボディ", req.body);
-  try {
-    const imagePath = req.file ? req.file.path : null; // アップロードした画像のパス
-    console.log("画像", req.file);
+    const imagePath = req.file ? req.file.path : null;
     const deadlineDate = new Date(req.body.deadlineDate);
+
     const savedData = await prisma.task.create({
       data: {
-        ...req.body,
-        image_url: imagePath,
+        name: req.body.name,
+        explanation: req.body.explanation,
         deadlineDate: deadlineDate,
         status: Number(req.body.status),
         genreId: Number(req.body.genreId),
+        image_url: imagePath,
       },
     });
 
     if (savedData.image_url) {
       savedData.image_url = `http://localhost:3000/${savedData.image_url}`;
-      console.log(savedData.image_url);
-    } else {
-      savedData.image_url = null;
     }
-
     res.json(savedData);
   } catch (error) {
-    console.log(error);
-    res.status(500).send("タスクの保存に失敗しました");
+    console.error(error);
+    res.status(500).send("保存失敗");
   }
+});
+
+// 3. 全ジャンル取得
+app.get("/genres", async (req, res) => {
+  try {
+    const allGenres = await prisma.genre.findMany();
+    res.json(allGenres);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("取得失敗");
+  }
+});
+
+// 4. ジャンル保存 (これが必要でした)
+app.post("/genres", async (req, res) => {
+  try {
+    const newGenre = await prisma.genre.create({
+      data: {
+        name: req.body.name,
+      },
+    });
+    res.json(newGenre);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("保存失敗");
+  }
+});
+
+app.listen(3000, () => {
+  console.log("listening on localhost 3000");
 });
