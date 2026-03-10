@@ -39,9 +39,12 @@ export const useTaskStore = defineStore("task", () => {
       formData.append("deadlineDate", newTask.deadlineDate);
       formData.append("status", newTask.status);
       formData.append("genreId", newTask.genreId);
-      formData.append("image_url", newTask.image_url);
 
-      // headersはAxiosがFormDataを検知して自動設定してくれるため、基本省略可能です
+      // 画像ファイルを append。キー名はサーバーの定義（例: image）に合わせる
+      if (newTask.image_url) {
+        formData.append("image", newTask.image_url);
+      }
+
       const response = await api.post("/tasks", formData);
 
       const addedTask = response.data;

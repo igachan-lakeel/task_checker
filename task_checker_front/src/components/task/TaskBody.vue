@@ -25,8 +25,15 @@ const handleImageUpload = (event) => {
 
 const emit = defineEmits(["close-modal"]);
 
+// TaskBody.vue
 const submitTask = async () => {
-  taskStore.addTask(task.value);
+  // ジャンルが未選択（空文字や初期値）の場合は送信させない
+  if (!task.value.genreId) {
+    alert("ジャンルを選択してください");
+    return;
+  }
+
+  await taskStore.addTask(task.value);
   emit("close-modal");
 };
 </script>
