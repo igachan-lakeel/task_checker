@@ -5,6 +5,17 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter(); // ナビゲーション用（router.push など）
 const route = useRoute(); // 現在のルート情報（route.params など）
+const email = ref("");
+const password = ref("");
+
+const handleSignIn = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, email.value, password.value);
+    router.push("/home");
+  } catch (error) {
+    console.log("ログインに失敗しました");
+  }
+};
 </script>
 
 <template>
@@ -12,9 +23,14 @@ const route = useRoute(); // 現在のルート情報（route.params など）
     <Header />
     <div class="form-body">
       <h1>ログイン</h1>
-      <input type="text" id="email" placeholder="email" />
-      <input type="password" id="password" placeholder="password" />
-      <button value="ログイン">ログイン</button>
+      <input type="text" id="email" v-model="email" placeholder="email" />.
+      <input
+        type="password"
+        id="password"
+        v-model="password"
+        placeholder="password"
+      />
+      <button value="ログイン" @click="handleSignIn">ログイン</button>
       <p>
         アカウント作成がお済みでない場合は、
         <RouterLink to="/signup">こちらへ</RouterLink>
